@@ -1,0 +1,9 @@
+{
+    "name": "seemyping/router",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "src"
+        }
+    }
+}
