@@ -15,10 +15,12 @@ class Route
     private $callable;
     private $matches = [];
     private $params = [];
-    public function __construct($path, $callable)
+    private $container = [];
+    public function __construct($path, $callable, $container)
     {
         $this->callable = $callable;
         $this->path = trim($path, '/');
+        $this->container = $container;
     }
 
     /*
@@ -53,7 +55,7 @@ class Route
         if(is_string($this->callable)) {
             $params = explode("#", $this->callable);
             $controller = "App\\Controller\\". $params[0] . "Controller";
-            $controller = new $controller();
+            $controller = new $controller($this->container);
             return call_user_func_array([$controller, $params[1]], $this->matches);
         } else {
             return call_user_func_array($this->callable, $this->matches);

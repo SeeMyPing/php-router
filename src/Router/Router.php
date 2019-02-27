@@ -14,9 +14,11 @@ class Router
     private $url;
     private $routes = [];
     private $namedRoutes = [];
-    public function __construct($url)
+    private $container = [];
+    public function __construct($url, $container)
     {
         $this->url = $url;
+        $this->container = $container;
     }
 
     public function get($path, $callable, $name = null) {
@@ -27,7 +29,7 @@ class Router
     }
 
     public function add($path, $callable, $name = null, $method) {
-        $route = new Route($path, $callable);
+        $route = new Route($path, $callable, $this->container);
         $this->routes[$method][] = $route;
         if(is_string($callable) && $name === null) {
             $name = $callable;
@@ -62,5 +64,9 @@ class Router
             throw new \Exception('No routes matches this name');
         }
         return $this->namedRoutes[$name]->getUrl($params);
+    }
+
+    public function getContainer() {
+        return $this->container;
     }
 }
